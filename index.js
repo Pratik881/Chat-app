@@ -8,11 +8,18 @@ const io=new Server(server)
 app.get('/',(req,res)=>{
     res.sendFile(__dirname+'/index1.html')
 })
+const onlineUsers={}
 io.on('connection',(socket)=>{
     console.log('a user is connected',socket.id);
+    socket.on('user_connect',(username)=>{
+        onlineUsers[socket.id]=username;
+        io.emit('update_online_users',Object.values(onlineUsers))
+    })
     socket.on('disconnect',()=>{
         console.log('user disconnected',socket.id)
-    })
+        delete onlineUsers[socket.id];
+        io.emit('update_online_users',Object.values(onlineUsers))
+    }) 
     socket.on('chat message',(msg)=>{
         
         console.log('message is', msg.msg)

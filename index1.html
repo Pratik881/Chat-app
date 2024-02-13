@@ -18,6 +18,7 @@
    
   </head>
   <body>
+    <div id="online-users"></div>
     <div id="typingMessage"></div>
     <ul id="messages"></ul>
     <form id="form" action="">
@@ -29,7 +30,10 @@
           var form=document.getElementById('form')
           var input=document.getElementById('input')
           var typingMessage = document.getElementById('typingMessage');
+          var onlineUsers = document.getElementById('online-users');
           let person = prompt("Please enter your name", "Harry Potter");
+          //sending the users name
+          socket.emit('user_connect',person)
           input.onfocus=()=>{
                 socket.emit('user_typing',person)
               }
@@ -73,7 +77,13 @@
                window.scrollTo(0,document.body.scrollHeight)
               })
             
-         
+         //update online users list
+         socket.on('update_online_users',(users)=>{
+          onlineUsers.innerHTML='<strong>Online Users:</strong><br>';
+          users.forEach((user)=>{
+            onlineUsers.innerHTML+= `${user}<br>`
+          })
+         })
         
       </script>
   </body>
