@@ -46,7 +46,6 @@
              typingMessage.textContent=''
           },5000)
           })  
-          
           var input=document.getElementById('input')
           form.addEventListener('submit',(e)=>{
               e.preventDefault();
@@ -60,11 +59,20 @@
              
           })
           socket.on('chat message',(msg)=>{
-                  var item=document.createElement('li')
-                  item.textContent=`${msg.person}: ${msg.msg}`;
-                  messages.appendChild(item);
-          window.scrollTo(0, document.body.scrollHeight);
+               //check if the message is sent by another user
+          //      if(msg.person!=person){
+          //         var item=document.createElement('li')
+          //         item.textContent=`${msg.person}: ${msg.msg}`;
+          //         messages.appendChild(item);
+          // window.scrollTo(0, document.body.scrollHeight);
+          //      }
+          //display message to all
+                var item=document.createElement('li')
+                item.textContent=`${msg.person}: ${msg.msg}`;
+               messages.appendChild(item)
+               window.scrollTo(0,document.body.scrollHeight)
               })
+            
          
         
       </script>
