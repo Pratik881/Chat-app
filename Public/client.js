@@ -6,6 +6,21 @@ var typingMessage = document.getElementById('typingMessage');
 var onlineUsers = document.getElementById('online-users');
 let person = prompt("Please enter your name", "Harry Potter");
 socket.emit('user_connect', person);
+// Listen for previous messages from the server
+socket.on('previous_messages', (previousMessages) => {
+    previousMessages.forEach(msg => {
+        appendMessage(msg);
+    });
+});
+
+// Function to append a message to the chat interface
+function appendMessage(msg) {
+    var item = document.createElement('li');
+    item.textContent = `${msg.person}: ${msg.msg}`;
+    message.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
 input.onfocus = () => {
     socket.emit('user_typing', person);
 };

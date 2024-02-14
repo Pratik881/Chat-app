@@ -10,9 +10,11 @@ app.get('/',(req,res)=>{
     res.sendFile(__dirname+'/Public/index1.html')
 })
 const onlineUsers={}
+let messages=[]
 io.on('connection',(socket)=>{
     console.log('a user is connected',socket.id);
     socket.on('user_connect',(username)=>{
+        socket.emit('previous_messages',messages)
         onlineUsers[socket.id]=username;
         io.emit('update_online_users',Object.values(onlineUsers))
     })
@@ -24,6 +26,7 @@ io.on('connection',(socket)=>{
     socket.on('chat message',(msg)=>{
         
         console.log('message is', msg.msg)
+        messages.push(msg)
         io.emit('chat message',msg)
     })
     socket.on('user_typing',(socket_id)=>{
